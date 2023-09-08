@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import Home from "./screen/Home";
@@ -10,17 +9,8 @@ export default function App() {
     <Provider store={store}>
       <SafeAreaView>
         <Home />
-        <FlashMessage type="fail" text="Hello" />
+        <FlashMessage />
       </SafeAreaView>
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

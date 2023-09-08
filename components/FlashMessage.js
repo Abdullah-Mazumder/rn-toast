@@ -10,10 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { hideFlashMessage } from "../redux/flashMessageSlice";
 
-const FlashMessage = ({ type, text, autoClose = 3000 }) => {
+const FlashMessage = () => {
   const colorScheme = useColorScheme();
   const dispatch = useDispatch();
-  const { isVisible } = useSelector((state) => state.flashMessage);
+  const { isVisible, autoClose, message } = useSelector(
+    (state) => state.flashMessage
+  );
+  console.log(autoClose);
+  const type = message.type || "success";
+  const text = message.text || "Hello world";
 
   //message types and colors
   const messageData = {
@@ -34,10 +39,10 @@ const FlashMessage = ({ type, text, autoClose = 3000 }) => {
     messageData[type].colors[colorShade === "dark" ? 1 : 0];
   const iconBackgroundColor = iconBackgroundColors[type][colorShade];
   useEffect(() => {
-    if (isVisible && autoClose) {
+    if (isVisible && typeof autoClose === "number") {
       const timeout = setTimeout(() => {
         handleClose();
-      }, 3000);
+      }, autoClose);
       return () => clearTimeout(timeout);
     }
   }, [isVisible, autoClose, dispatch]);
