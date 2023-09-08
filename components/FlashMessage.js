@@ -10,15 +10,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { hideFlashMessage } from "../redux/flashMessageSlice";
 
-const FlashMessage = () => {
+const FlashMessage = ({
+  type = "success",
+  text = "Hello World",
+  autoClose,
+}) => {
   const colorScheme = useColorScheme();
   const dispatch = useDispatch();
-  const { isVisible, autoClose, message } = useSelector(
-    (state) => state.flashMessage
-  );
-  console.log(autoClose);
-  const type = message.type || "success";
-  const text = message.text || "Hello world";
+  const { isVisible } = useSelector((state) => state.flashMessage);
 
   //message types and colors
   const messageData = {
@@ -39,10 +38,10 @@ const FlashMessage = () => {
     messageData[type].colors[colorShade === "dark" ? 1 : 0];
   const iconBackgroundColor = iconBackgroundColors[type][colorShade];
   useEffect(() => {
-    if (isVisible && typeof autoClose === "number") {
+    if (isVisible && autoClose) {
       const timeout = setTimeout(() => {
         handleClose();
-      }, autoClose);
+      }, 3000);
       return () => clearTimeout(timeout);
     }
   }, [isVisible, autoClose, dispatch]);
@@ -50,9 +49,11 @@ const FlashMessage = () => {
   const handleClose = () => {
     dispatch(hideFlashMessage());
   };
+
   if (!isVisible) {
     return null;
   }
+
   return (
     <View style={[styles.messageContainer, { backgroundColor }]}>
       <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative",
     maxWidth: "auto",
-    // marginTop: 60,
+    marginTop: 60,
   },
   iconContainer: {
     position: "absolute",
